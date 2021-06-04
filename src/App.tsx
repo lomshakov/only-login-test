@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route, Redirect
+} from "react-router-dom";
+import AuthProvider from "./context/AuthProvider";
+import NormalRoute from "./routes/NormalRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import {Layout} from "./components/common/Layout";
+import {LoginPage} from "./components/LoginPage/LoginPage";
+import {ProfilePage} from "./components/ProfilePage/ProfilePage";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <AuthProvider>
+            <Router>
+                <Switch>
+                    <Route exact path='/'>
+                        <Redirect to="/login"/>
+                    </Route>
+                    <NormalRoute path="/login" layout={Layout} component={LoginPage}/>
+                    <ProtectedRoute path="/profile" layout={Layout} component={ProfilePage}/>
+                </Switch>
+            </Router>
+        </AuthProvider>
+    );
 }
 
 export default App;
